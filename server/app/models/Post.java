@@ -58,9 +58,10 @@ public class Post extends Model {
 
     public static final Finder<Long, Post> find = new Finder<>(Post.class);
 
-    public Post(){}
+    public Post() {
+    }
 
-    public Post( String title, String content, User user) {
+    public Post(String title, String content, User user) {
         this.title = title;
         this.content = content;
         this.user = user;
