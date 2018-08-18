@@ -22,8 +22,8 @@ public class User extends Model {
     @Constraints.Email
     private String email;
 
-    @Column(length = 50, nullable = false, unique = true)
-    @Constraints.MaxLength(50)
+    @Column(length = 20, nullable = false, unique = true)
+    @Constraints.MaxLength(20)
     @Constraints.Required
     private String nickName;
 

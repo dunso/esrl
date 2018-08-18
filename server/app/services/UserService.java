@@ -14,7 +14,7 @@ public interface UserService {
 
     Optional<UserDTO> findUserByNickName(String nickName);
 
-    boolean authenticateUser(SignInDTO signInDTO);
+    Optional<UserDTO> authenticateUser(SignInDTO signInDTO);
 
     boolean saveUser(UserDTO userDTO);
 

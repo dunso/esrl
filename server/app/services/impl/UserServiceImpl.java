@@ -33,10 +33,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean authenticateUser(SignInDTO signInDTO) {
+    public Optional<UserDTO> authenticateUser(SignInDTO signInDTO) {
         return userDao.findUserByEmail(signInDTO.getEmail())
-                .map(user -> user.getPassword().equals(signInDTO.getPassword()))
-                .orElse(false);
+                .map(u -> u.getPassword().equals(signInDTO.getPassword()) ? u : null)
+                .map(this::convertToDTO);
     }
 
     @Override
