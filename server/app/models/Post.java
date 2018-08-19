@@ -49,7 +49,7 @@ public class Post extends Model {
     private User user;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    private List<String> catalogies;
+    private List<String> categories;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
     private List<Comment> comments;
@@ -131,12 +131,12 @@ public class Post extends Model {
         this.user = user;
     }
 
-    public List<String> getCatalogies() {
-        return catalogies;
+    public List<String> getCategories() {
+        return categories;
     }
 
-    public void setCatalogies(List<String> catalogies) {
-        this.catalogies = catalogies;
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
     }
 
     public List<Comment> getComments() {

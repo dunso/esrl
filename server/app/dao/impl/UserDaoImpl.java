@@ -19,7 +19,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findUserByNickName(String nickName) {
         return User.find.query().where()
-                .eq("nickName", nickName.trim().toLowerCase())
+                .eq("nick_name", nickName.trim().toLowerCase())
                 .findOneOrEmpty();
     }
 
