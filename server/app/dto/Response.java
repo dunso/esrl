@@ -8,18 +8,24 @@ public class Response<T> {
     private String msg;
     private T data;
 
-    Response(CustomCode customCode) {
+    public Response(CustomCode customCode) {
         this.code = customCode.getCode();
         this.msg = customCode.getMsg();
     }
 
-    Response(CustomCode customCode, T data) {
+    public Response(CustomCode customCode, T data) {
         this(customCode);
         this.data = data;
     }
 
+    public static <T> Response<T> success() {
+        return new Response(CustomCode.SUCCESS);
+    }
     public static <T> Response<T> success(T data) {
         return new Response(CustomCode.SUCCESS, data);
+    }
+    public static <T> Response<T> forbidden() {
+        return new Response(CustomCode.FORBIDDEN);
     }
 
     public int getCode() {

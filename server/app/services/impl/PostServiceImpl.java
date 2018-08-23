@@ -50,7 +50,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public boolean savePost(PostDTO postDTO) {
+    public boolean savePost(PostDTO postDTO, String email) {
 
         Post post = new Post();
         post.setTitle(postDTO.getTitle());
@@ -63,7 +63,8 @@ public class PostServiceImpl implements PostService {
         post.setCreateTime(now);
         post.setLastModifyTime(now);
 
-        post.setUser(userDao.findUserByNickName(postDTO.getNickName()).orElse(null));
+        userDao.findUserByEmail(email).ifPresent(post::setUser);
+
         post.setCategories(postDTO.getCategories());
         post.setCommentCount(0L);
 

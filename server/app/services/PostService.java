@@ -17,7 +17,7 @@ public interface PostService {
 
     Optional<PostDTO> getPostById(Long postId);
 
-    boolean savePost(PostDTO postDTO);
+    boolean savePost(PostDTO postDTO, String email);
 
     boolean updatePost(PostDTO postDTO);
 

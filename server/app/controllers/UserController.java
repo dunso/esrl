@@ -2,15 +2,17 @@ package controllers;
 
 import annotations.Authenticated;
 import com.google.common.base.Strings;
+import dto.Response;
 import dto.SignInDTO;
 import dto.UserDTO;
+import enums.CustomCode;
 import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.UserService;
-import utils.Tools;
 
 import javax.inject.Inject;
 import java.io.UnsupportedEncodingException;
@@ -39,24 +41,20 @@ public class UserController extends Controller {
 
         Optional<UserDTO> existingUser = userService.findUserByEmail(userDTO.getEmail());
         if (existingUser.isPresent()) {
-            return ok(
-                    Tools.buildJsonResponse(40001, "该Email已注册过，请使用其它Email注册")
-            );
+            return ok(Json.toJson(new Response<>(CustomCode.EMAIL_ALREADY_USED)));
         }
         existingUser = userService.findUserByNickName(userDTO.getNickName());
         if (existingUser.isPresent()) {
-            return ok(
-                    Tools.buildJsonResponse(40002, "该昵称已被占用，请使用其它昵称")
-            );
+            return ok(Json.toJson(new Response<>(CustomCode.NICKNAME_ALREADY_EXIST)));
         }
         if (userService.saveUser(userDTO)) {
             session().clear();
             session("email", userDTO.getEmail());
             session("nickName", userDTO.getNickName());
             session("photo", String.valueOf(userDTO.getPhoto()));
-            return ok(Tools.buildJsonResponse(20000, "注册成功"));
+            return ok(Json.toJson(Response.success()));
         } else {
-            return ok(Tools.buildJsonResponse(40003, "注册失败"));
+            return ok(Json.toJson(new Response<>(CustomCode.FAILED_REGISTER)));
         }
     }
 
@@ -69,15 +67,15 @@ public class UserController extends Controller {
                 .map(userDTO -> {
                     session().clear();
                     session("email", userDTO.getEmail());
-                    return ok(Tools.buildJsonResponse(20000, userDTO));
+                    return ok(Json.toJson(Response.success()));
                 })
-                .orElse(ok(Tools.buildJsonResponse(40400, "邮箱或密码输入错误")));
+                .orElse(ok(Json.toJson(new Response<>(CustomCode.FAILED_SIGNIN))));
     }
 
     @Authenticated
     public Result logout() {
         session().clear();
-        return ok(Tools.buildJsonResponse(20000, "注销成功"));
+        return ok(Json.toJson(Response.success()));
     }
 
     public Result isAuthenticated() {
@@ -90,7 +88,7 @@ public class UserController extends Controller {
             } catch (UnsupportedEncodingException e) {
                 logger.error(e.getMessage(), e);
             }
-            return ok(Tools.buildJsonResponse(20000, userDto));
+            return ok(Json.toJson(Response.success(userDto)));
         }
     }
 }
