@@ -32,13 +32,13 @@ public class PostDaoImpl implements PostDao {
     }
 
     @Override
-    public PagedList<Post> getPagePostsByNickName(int pageSize, int currentPage, String nickName, PostStatus postStatus) {
+    public PagedList<Post> getPagePostsByEmail(int pageSize, int currentPage, String email, PostStatus postStatus) {
         ExpressionList<Post> expressionList = Post.find.query().where();
         if (postStatus != null) {
             expressionList = expressionList.eq("post_status", postStatus);
         }
         return expressionList
-                .eq("user_id", userDao.findUserByNickName(nickName).map(u -> u.getId()))
+                .eq("user_id", userDao.findUserByEmail(email).map(u -> u.getId()))
                 .orderBy("create_time desc")
                 .setFirstRow(pageSize * (currentPage - 1))
                 .setMaxRows(pageSize)

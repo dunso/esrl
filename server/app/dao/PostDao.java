@@ -13,7 +13,7 @@ public interface PostDao {
 
     PagedList<Post> getPagePosts(int pageSize, int currentPage, PostStatus postStatus);
 
-    PagedList<Post> getPagePostsByNickName(int pageSize, int currentPage, String nickName, PostStatus postStatus);
+    PagedList<Post> getPagePostsByEmail(int pageSize, int currentPage, String email, PostStatus postStatus);
 
     Optional<Post> getPostById(Long postId);
 

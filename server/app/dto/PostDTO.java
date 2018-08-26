@@ -1,6 +1,8 @@
 package dto;
 
 import enums.PostStatus;
+import models.Comment;
+import models.Post;
 import play.data.validation.Constraints;
 
 import java.time.LocalDateTime;
@@ -28,6 +30,8 @@ public class PostDTO {
 
     private List<String> categories;
 
+    private List<CommentDTO> comments;
+
     private Long commentCount;
 
     public PostDTO() {
@@ -35,7 +39,7 @@ public class PostDTO {
 
     public PostDTO(Long id, String title, String content,
                    String postAbstract, PostStatus postStatus, LocalDateTime lastModifyTime,
-                   String nickName, List<String> categories, long commentCount) {
+                   String nickName, List<String> categories, List<CommentDTO> comments, long commentCount) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -44,7 +48,26 @@ public class PostDTO {
         this.lastModifyTime = lastModifyTime;
         this.nickName = nickName;
         this.categories = categories;
+        this.comments = comments;
         this.commentCount = commentCount;
+    }
+
+    public PostDTO(Post post, boolean isContrainComments) {
+
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.postAbstract = post.getPostAbstract();
+        this.postStatus = post.getPostStatus();
+        this.lastModifyTime = post.getLastModifyTime();
+        this.nickName = post.getUser().getNickName();
+        this.categories = post.getCategories();
+        this.commentCount = post.getCommentCount();
+
+        if(isContrainComments){
+            post.getComments().stream().forEach(comment -> this.comments.add(new CommentDTO(comment)));
+        }
+
     }
 
     public Long getId() {

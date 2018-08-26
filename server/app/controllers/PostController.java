@@ -23,8 +23,10 @@ public class PostController extends Controller {
 
     @Inject
     public Config config;
+
     @Inject
     public FormFactory formFactory;
+
     @Inject
     public PostService postService;
 
@@ -35,11 +37,11 @@ public class PostController extends Controller {
         return ok(Json.toJson(Response.success(postsPager)));
     }
 
-    public Result getPagePostsByNickName(Integer pageSize, Integer currentPage, PostStatus postStatus, String email) {
+    public Result getPagePostsByEmail(Integer pageSize, Integer currentPage, PostStatus postStatus, String email) {
         if (email == null) {
             email = session().get("email");
         }
-        PostsPager postsPager = postService.getPagePostsByNickName(
+        PostsPager postsPager = postService.getPagePostsByEmail(
                 pageSize, currentPage, postStatus != null ? postStatus : null, email
         );
         return ok(Json.toJson(Response.success(postsPager)));

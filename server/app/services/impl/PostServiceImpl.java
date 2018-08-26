@@ -36,17 +36,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostsPager getPagePostsByNickName(int pageSize, int currentPage, PostStatus postStatus, String nickName) {
+    public PostsPager getPagePostsByEmail(int pageSize, int currentPage, PostStatus postStatus, String email) {
 
         pageSize = pageSize < 1 ? defaultPageSize : pageSize;
         currentPage = currentPage < 1 ? 1 : currentPage;
-        return new PostsPager(postDao.getPagePostsByNickName(pageSize, currentPage, nickName, postStatus));
+        return new PostsPager(postDao.getPagePostsByEmail(pageSize, currentPage, email, postStatus));
     }
 
     @Override
     public Optional<PostDTO> getPostById(Long postId) {
         return postDao.getPostById(postId)
-                .map(this::convertToDTO);
+                .map(post -> new PostDTO(post, true));
     }
 
     @Override
@@ -88,21 +88,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(Long postId) {
         postDao.delete(postId);
-    }
-
-    @Override
-    public PostDTO convertToDTO(Post post) {
-        return new PostDTO(
-                post.getId(),
-                post.getTitle(),
-                post.getContent(),
-                post.getPostAbstract(),
-                post.getPostStatus(),
-                post.getLastModifyTime(),
-                post.getUser().getNickName(),
-                post.getCategories(),
-                post.getCommentCount()
-        );
     }
 
 }
