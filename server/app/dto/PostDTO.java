@@ -13,11 +13,11 @@ public class PostDTO {
 
     public Long id;
 
-    @Constraints.MaxLength(value = 255, message = "*标题最多255个字符")
-    @Constraints.Required(message = "*标题不能为空")
+    @Constraints.MaxLength(value = 255, message = "*The title must be less than 255 characters")
+    @Constraints.Required(message = "*Please input title")
     private String title;
 
-    @Constraints.Required(message = "*内容不能为空")
+    @Constraints.Required(message = "*Please input content")
     private String content;
 
     private String postAbstract;
@@ -37,22 +37,7 @@ public class PostDTO {
     public PostDTO() {
     }
 
-    public PostDTO(Long id, String title, String content,
-                   String postAbstract, PostStatus postStatus, LocalDateTime lastModifyTime,
-                   String nickName, List<String> categories, List<CommentDTO> comments, long commentCount) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.postAbstract = postAbstract;
-        this.postStatus = postStatus;
-        this.lastModifyTime = lastModifyTime;
-        this.nickName = nickName;
-        this.categories = categories;
-        this.comments = comments;
-        this.commentCount = commentCount;
-    }
-
-    public PostDTO(Post post, boolean isContrainComments) {
+    public PostDTO(Post post, boolean isContainComments) {
 
         this.id = post.getId();
         this.title = post.getTitle();
@@ -64,7 +49,7 @@ public class PostDTO {
         this.categories = post.getCategories();
         this.commentCount = post.getCommentCount();
 
-        if(isContrainComments){
+        if(isContainComments){
             post.getComments().stream().forEach(comment -> this.comments.add(new CommentDTO(comment)));
         }
 

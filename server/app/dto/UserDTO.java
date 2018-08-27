@@ -4,16 +4,17 @@ import play.data.validation.Constraints;
 
 public class UserDTO {
 
-    @Constraints.Email(message = "*不是一个邮箱")
-    @Constraints.Required(message = "*请输入邮箱")
+    @Constraints.Email(message = "*It is not an email")
+    @Constraints.Required(message = "*Please input your email")
     private String email;
 
-    @Constraints.MaxLength(value = 20, message = "*最长20个字符")
-    @Constraints.Required(message = "*请输入昵称")
+    @Constraints.MaxLength(value = 20, message = "*The nickname must be less than 20 characters")
+    @Constraints.Required(message = "*Please input your nickname")
     private String nickName;
 
-    @Constraints.MinLength(value = 6, message = "*密码至少为6位")
-    @Constraints.Required(message = "*请输入密码")
+    @Constraints.MinLength(value = 6, message = "*The password must be more then 6 characters")
+    @Constraints.MaxLength(value = 255, message = "*The password must be less then 255 characters")
+    @Constraints.Required(message = "*Please input your password")
     private String password;
 
     private byte[] photo;

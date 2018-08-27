@@ -21,9 +21,11 @@ public class Response<T> {
     public static <T> Response<T> success() {
         return new Response(CustomCode.SUCCESS);
     }
+
     public static <T> Response<T> success(T data) {
         return new Response(CustomCode.SUCCESS, data);
     }
+
     public static <T> Response<T> forbidden() {
         return new Response(CustomCode.FORBIDDEN);
     }
