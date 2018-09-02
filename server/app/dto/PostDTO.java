@@ -26,7 +26,7 @@ public class PostDTO {
 
     private LocalDateTime lastModifyTime;
 
-    private String nickName;
+    private String email;
 
     private List<String> categories;
 
@@ -45,7 +45,7 @@ public class PostDTO {
         this.postAbstract = post.getPostAbstract();
         this.postStatus = post.getPostStatus();
         this.lastModifyTime = post.getLastModifyTime();
-        this.nickName = post.getUser().getNickName();
+        this.email = post.getUser().getEmail();
         this.categories = post.getCategories();
         this.commentCount = post.getCommentCount();
 
@@ -103,12 +103,12 @@ public class PostDTO {
         this.lastModifyTime = lastModifyTime;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public List<String> getCategories() {

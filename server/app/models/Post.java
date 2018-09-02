@@ -48,7 +48,6 @@ public class Post extends Model {
     @ManyToOne
     private User user;
 
-    @ManyToMany(cascade = CascadeType.ALL)
     private List<String> categories;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")

@@ -46,7 +46,7 @@ public class User extends Model {
     @Column(length = 4096)
     private String token;
 
-    @Column(nullable = false, insertable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     @CreatedTimestamp
     private LocalDateTime registerTime;
 

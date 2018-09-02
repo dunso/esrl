@@ -15,7 +15,6 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import services.PostService;
 import utils.PostsPager;
-import utils.Tools;
 
 import javax.inject.Inject;
 
@@ -30,19 +29,21 @@ public class PostController extends Controller {
     @Inject
     public PostService postService;
 
-    public Result getPagePosts(Integer pageSize, Integer currentPage, PostStatus postStatus) {
+    public Result getPagePosts(Integer pageSize,
+                               Integer currentPage,
+                               Integer postStatus) {
         PostsPager postsPager = postService.getPagePosts(
-                pageSize, currentPage, postStatus != null ? postStatus : null
+                pageSize, currentPage, postStatus != 0 ? PostStatus.DRAFT : PostStatus.PUBLISH
         );
         return ok(Json.toJson(Response.success(postsPager)));
     }
 
-    public Result getPagePostsByEmail(Integer pageSize, Integer currentPage, PostStatus postStatus, String email) {
+    public Result getPagePostsByEmail(String email, Integer pageSize, Integer currentPage, Integer postStatus) {
         if (email == null) {
             email = session().get("email");
         }
         PostsPager postsPager = postService.getPagePostsByEmail(
-                pageSize, currentPage, postStatus != null ? postStatus : null, email
+                pageSize, currentPage, postStatus != 0 ? PostStatus.DRAFT : PostStatus.PUBLISH, email
         );
         return ok(Json.toJson(Response.success(postsPager)));
     }

@@ -3,11 +3,12 @@ package services;
 import com.google.inject.ImplementedBy;
 import dto.PostDTO;
 import enums.PostStatus;
+import services.impl.PostServiceImpl;
 import utils.PostsPager;
 
 import java.util.Optional;
 
-@ImplementedBy(PostService.class)
+@ImplementedBy(PostServiceImpl.class)
 public interface PostService {
 
     PostsPager getPagePosts(int pageSize, int currentPage, PostStatus postStatus);

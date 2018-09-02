@@ -16,7 +16,7 @@ import java.util.Optional;
 public class PostServiceImpl implements PostService {
 
     @Inject
-    private static Config config;
+    private Config config;
 
     @Inject
     private PostDao postDao;
@@ -24,7 +24,7 @@ public class PostServiceImpl implements PostService {
     @Inject
     private UserDao userDao;
 
-    private static final int defaultPageSize = config.getInt("play.pager.post.pageSize");
+    private final int defaultPageSize =10; //config.getInt("pager.post.pageSize");
 
 
     @Override

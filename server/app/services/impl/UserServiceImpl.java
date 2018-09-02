@@ -9,7 +9,6 @@ import play.Logger;
 import services.UserService;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
@@ -46,8 +45,6 @@ public class UserServiceImpl implements UserService {
         user.setNickName(userDTO.getNickName());
         user.setPassword(userDTO.getPassword());
         user.setRole(Role.CONTRIBUTOR);
-        user.setRegisterTime(LocalDateTime.now());
-        user.setLastModifyTime(LocalDateTime.now());
         return userDao.save(user);
     }
 

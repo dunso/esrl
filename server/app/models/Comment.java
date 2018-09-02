@@ -43,10 +43,7 @@ public class Comment extends Model {
 
     public static final Finder<Long, Comment> find = new Finder<>(Comment.class);
 
-    public Comment(String content, Post post, User user) {
-        this.content = content;
-        this.post = post;
-        this.user = user;
+    public Comment() {
     }
 
     public Long getId() {
