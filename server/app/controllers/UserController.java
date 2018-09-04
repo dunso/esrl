@@ -67,7 +67,7 @@ public class UserController extends Controller {
                 .map(userDTO -> {
                     session().clear();
                     session("email", userDTO.getEmail());
-                    return ok(Json.toJson(Response.success()));
+                    return ok(Json.toJson(Response.success(userDTO)));
                 })
                 .orElse(ok(Json.toJson(new Response<>(CustomCode.FAILED_SIGNIN))));
     }
@@ -82,13 +82,17 @@ public class UserController extends Controller {
         if (Strings.isNullOrEmpty(session().get("email"))) {
             return unauthorized();
         } else {
-            UserDTO userDto = new UserDTO(session().get("email"), session().get("nickName"));
-            try {
-                userDto.setPhoto(session().get("photo").getBytes("utf-8"));
-            } catch (UnsupportedEncodingException e) {
-                logger.error(e.getMessage(), e);
+            UserDTO userDTO = new UserDTO(session().get("email"), session().get("nickName"));
+            String photo = session().get("photo");
+            if(!Strings.isNullOrEmpty(photo)){
+                try {
+                    userDTO.setPhoto(photo.getBytes("utf-8"));
+                } catch (UnsupportedEncodingException e) {
+                    logger.error(e.getMessage(), e);
+                }
             }
-            return ok(Json.toJson(Response.success(userDto)));
+
+            return ok(Json.toJson(Response.success(userDTO)));
         }
     }
 }
