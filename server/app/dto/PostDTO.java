@@ -22,7 +22,7 @@ public class PostDTO {
 
     private String postAbstract;
 
-    private PostStatus postStatus;
+    private String postStatus;
 
     private LocalDateTime lastModifyTime;
 
@@ -43,7 +43,7 @@ public class PostDTO {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.postAbstract = post.getPostAbstract();
-        this.postStatus = post.getPostStatus();
+        this.postStatus = post.getPostStatus().toString();
         this.lastModifyTime = post.getLastModifyTime();
         this.email = post.getUser().getEmail();
         this.categories = post.getCategories();
@@ -87,11 +87,11 @@ public class PostDTO {
         this.postAbstract = postAbstract;
     }
 
-    public PostStatus getPostStatus() {
+    public String getPostStatus() {
         return postStatus;
     }
 
-    public void setPostStatus(PostStatus postStatus) {
+    public void setPostStatus(String postStatus) {
         this.postStatus = postStatus;
     }
 

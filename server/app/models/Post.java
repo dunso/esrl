@@ -36,7 +36,7 @@ public class Post extends Model {
     @Enumerated(EnumType.STRING)
     private PostStatus postStatus;
 
-    @Column(nullable = false, insertable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     @CreatedTimestamp
     private LocalDateTime createTime;
 

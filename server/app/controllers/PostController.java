@@ -56,16 +56,19 @@ public class PostController extends Controller {
 
     @Authenticated
     public Result createPost() {
+
+        String email = session("email");
+        if (Strings.isNullOrEmpty(email)) {
+            return forbidden(Json.toJson(Response.forbidden()));
+        }
+
         Form<PostDTO> postForm = formFactory.form(PostDTO.class).bindFromRequest();
         if (postForm.hasErrors()) {
             return badRequest(postForm.errorsAsJson());
         }
 
         PostDTO postDTO = postForm.get();
-        String email = session("email");
-        if (Strings.isNullOrEmpty(email)) {
-            return forbidden(Json.toJson(Response.forbidden()));
-        }
+
 
         postService.savePost(postDTO, email);
 

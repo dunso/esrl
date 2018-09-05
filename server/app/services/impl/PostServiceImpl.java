@@ -1,5 +1,6 @@
 package services.impl;
 
+import com.google.common.base.Strings;
 import com.typesafe.config.Config;
 import dao.PostDao;
 import dao.UserDao;
@@ -7,6 +8,7 @@ import dto.PostDTO;
 import enums.PostStatus;
 import models.Post;
 import services.PostService;
+import utils.Constants;
 import utils.PostsPager;
 
 import javax.inject.Inject;
@@ -24,13 +26,11 @@ public class PostServiceImpl implements PostService {
     @Inject
     private UserDao userDao;
 
-    private final int defaultPageSize =10; //config.getInt("pager.post.pageSize");
-
 
     @Override
     public PostsPager getPagePosts(int pageSize, int currentPage, PostStatus postStatus) {
 
-        pageSize = pageSize < 1 ? defaultPageSize : pageSize;
+        pageSize = pageSize < 1 ? Constants.PAGE_SIZE : pageSize;
         currentPage = currentPage < 1 ? 1 : currentPage;
         return new PostsPager(postDao.getPagePosts(pageSize, currentPage, postStatus));
     }
@@ -38,7 +38,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostsPager getPagePostsByEmail(int pageSize, int currentPage, PostStatus postStatus, String email) {
 
-        pageSize = pageSize < 1 ? defaultPageSize : pageSize;
+        pageSize = pageSize < 1 ? Constants.PAGE_SIZE : pageSize;
         currentPage = currentPage < 1 ? 1 : currentPage;
         return new PostsPager(postDao.getPagePostsByEmail(pageSize, currentPage, email, postStatus));
     }
@@ -55,13 +55,17 @@ public class PostServiceImpl implements PostService {
         Post post = new Post();
         post.setTitle(postDTO.getTitle());
         post.setContent(postDTO.getContent());
-        post.setPostAbstract(postDTO.getPostAbstract());
-        post.setPostStatus(postDTO.getPostStatus());
 
-        LocalDateTime now = LocalDateTime.now();
+        if (!Strings.isNullOrEmpty(postDTO.getPostAbstract())) {
+            post.setPostAbstract(postDTO.getPostAbstract());
+        } else {
+            int postContentLength = postDTO.getContent().length();
+            post.setPostAbstract(postDTO.getContent().substring(0, postContentLength > Constants.POST_ABSTRACT_MAXLENGTH
+                    ? Constants.POST_ABSTRACT_MAXLENGTH : postContentLength)
+            );
+        }
 
-        post.setCreateTime(now);
-        post.setLastModifyTime(now);
+        post.setPostStatus(PostStatus.PUBLISH.toString().equals(postDTO.getPostStatus()) ? PostStatus.PUBLISH : PostStatus.DRAFT);
 
         userDao.findUserByEmail(email).ifPresent(post::setUser);
 
@@ -78,7 +82,7 @@ public class PostServiceImpl implements PostService {
                     post.setTitle(postDTO.getTitle());
                     post.setContent(postDTO.getContent());
                     post.setPostAbstract(postDTO.getPostAbstract());
-                    post.setPostStatus(postDTO.getPostStatus());
+                    post.setPostStatus(PostStatus.PUBLISH.toString().equals(postDTO.getPostStatus()) ? PostStatus.PUBLISH : PostStatus.DRAFT);
                     post.setLastModifyTime(LocalDateTime.now());
                     post.setCategories(postDTO.getCategories());
                     return postDao.update(post);
