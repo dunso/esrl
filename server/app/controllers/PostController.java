@@ -38,7 +38,10 @@ public class PostController extends Controller {
         return ok(Json.toJson(Response.success(postsPager)));
     }
 
-    public Result getPagePostsByEmail(String email, Integer pageSize, Integer currentPage, Integer postStatus) {
+    public Result getPagePostsByEmail(String email,
+                                      Integer pageSize,
+                                      Integer currentPage,
+                                      Integer postStatus) {
         if (email == null) {
             email = session().get("email");
         }
