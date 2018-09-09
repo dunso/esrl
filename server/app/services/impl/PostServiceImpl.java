@@ -6,13 +6,15 @@ import dao.PostDao;
 import dao.UserDao;
 import dto.PostDTO;
 import enums.PostStatus;
+import io.ebean.PagedList;
 import models.Post;
 import services.PostService;
 import utils.Constants;
-import utils.PostsPager;
+import utils.Pager;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public class PostServiceImpl implements PostService {
@@ -28,19 +30,29 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public PostsPager getPagePosts(int pageSize, int currentPage, PostStatus postStatus) {
+    public Pager getPagePosts(int pageSize, int currentPage, PostStatus postStatus) {
 
         pageSize = pageSize < 1 ? Constants.PAGE_SIZE : pageSize;
         currentPage = currentPage < 1 ? 1 : currentPage;
-        return new PostsPager(postDao.getPagePosts(pageSize, currentPage, postStatus));
+        PagedList<Post> pagePost = postDao.getPagePosts(pageSize, currentPage, postStatus);
+        List<PostDTO> pagePostDTOList = PostDTO.toPostDTOList(pagePost.getList());
+        if(pagePostDTOList == null){
+            return null;
+        }
+        return new Pager(pagePostDTOList, pagePost);
     }
 
     @Override
-    public PostsPager getPagePostsByEmail(int pageSize, int currentPage, PostStatus postStatus, String email) {
+    public Pager getPagePostsByEmail(int pageSize, int currentPage, PostStatus postStatus, String email) {
 
         pageSize = pageSize < 1 ? Constants.PAGE_SIZE : pageSize;
         currentPage = currentPage < 1 ? 1 : currentPage;
-        return new PostsPager(postDao.getPagePostsByEmail(pageSize, currentPage, email, postStatus));
+        PagedList<Post> pagePost = postDao.getPagePostsByEmail(pageSize, currentPage, email, postStatus);
+        List<PostDTO> pagePostDTOList = PostDTO.toPostDTOList(pagePost.getList());
+        if(pagePostDTOList == null){
+            return null;
+        }
+        return new Pager(pagePostDTOList, pagePost);
     }
 
     @Override
@@ -69,7 +81,6 @@ public class PostServiceImpl implements PostService {
 
         userDao.findUserByEmail(email).ifPresent(post::setUser);
 
-        post.setCategories(postDTO.getCategories());
         post.setCommentCount(0L);
 
         return postDao.save(post);
@@ -84,7 +95,6 @@ public class PostServiceImpl implements PostService {
                     post.setPostAbstract(postDTO.getPostAbstract());
                     post.setPostStatus(PostStatus.PUBLISH.toString().equals(postDTO.getPostStatus()) ? PostStatus.PUBLISH : PostStatus.DRAFT);
                     post.setLastModifyTime(LocalDateTime.now());
-                    post.setCategories(postDTO.getCategories());
                     return postDao.update(post);
                 }).orElse(false);
     }

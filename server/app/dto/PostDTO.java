@@ -1,13 +1,12 @@
 package dto;
 
-import enums.PostStatus;
-import models.Comment;
 import models.Post;
 import play.data.validation.Constraints;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class PostDTO {
 
@@ -28,7 +27,7 @@ public class PostDTO {
 
     private String email;
 
-    private List<String> categories;
+    private String nickName;
 
     private List<CommentDTO> comments;
 
@@ -46,13 +45,32 @@ public class PostDTO {
         this.postStatus = post.getPostStatus().toString();
         this.lastModifyTime = post.getLastModifyTime();
         this.email = post.getUser().getEmail();
-        this.categories = post.getCategories();
+        this.nickName = post.getUser().getNickName();
         this.commentCount = post.getCommentCount();
 
         if(isContainComments){
             post.getComments().stream().forEach(comment -> this.comments.add(new CommentDTO(comment)));
         }
 
+    }
+
+    public PostDTO(Post post) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.postAbstract = post.getPostAbstract();
+        this.postStatus = post.getPostStatus().toString();
+        this.lastModifyTime = post.getLastModifyTime();
+        this.email = post.getUser().getEmail();
+        this.nickName = post.getUser().getNickName();
+        this.commentCount = post.getCommentCount();
+    }
+
+    public static List<PostDTO> toPostDTOList(List<Post> postList) {
+        return Optional.ofNullable(postList)
+                .map(posts -> posts.stream()
+                        .map(PostDTO::new)
+                        .collect(Collectors.toList()))
+                .orElse(null);
     }
 
     public Long getId() {
@@ -111,12 +129,12 @@ public class PostDTO {
         this.email = email;
     }
 
-    public List<String> getCategories() {
-        return categories;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setCategories(List<String> categories) {
-        this.categories = categories;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public Long getCommentCount() {

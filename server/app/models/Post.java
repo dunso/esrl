@@ -4,15 +4,12 @@ import enums.PostStatus;
 import io.ebean.Finder;
 import io.ebean.Model;
 import io.ebean.annotation.CreatedTimestamp;
-import io.ebean.annotation.NotNull;
 import io.ebean.annotation.UpdatedTimestamp;
 import play.data.validation.Constraints;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 public class Post extends Model {

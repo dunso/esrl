@@ -38,7 +38,7 @@ public class PostDaoImpl implements PostDao {
             expressionList = expressionList.eq("post_status", postStatus);
         }
         return expressionList
-                .eq("user_id", userDao.findUserByEmail(email).map(u -> u.getId()))
+                .eq("user_id", userDao.findUserByEmail(email).map(u -> u.getId()).orElse(null))
                 .orderBy("create_time desc")
                 .setFirstRow(pageSize * (currentPage - 1))
                 .setMaxRows(pageSize)
